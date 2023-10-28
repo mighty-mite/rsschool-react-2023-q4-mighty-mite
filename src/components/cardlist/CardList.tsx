@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Service from '../../service/Service';
 import Card from '../card/Card';
+import './cardlist.scss';
 
 interface ICard {
   brand: string;
@@ -20,7 +21,11 @@ interface IState {
   cards: ICard[];
 }
 
-class CardList extends Component {
+interface IProps {
+  onSearch: string;
+}
+
+class CardList extends Component<IProps> {
   service = new Service();
 
   // eslint-disable-next-line react/state-in-constructor
@@ -30,6 +35,15 @@ class CardList extends Component {
 
   componentDidMount() {
     this.onRequest();
+  }
+
+  componentDidUpdate(prevProps: { onSearch: string }) {
+    const { onSearch } = this.props;
+    if (onSearch !== prevProps.onSearch) {
+      this.service
+        .searchProducts(onSearch)
+        .then((data) => this.setState({ cards: data }));
+    }
   }
 
   onRequest() {
@@ -42,19 +56,26 @@ class CardList extends Component {
 
   render() {
     const { cards } = this.state;
+    const content = cards.map((item) => {
+      return (
+        <Card
+          key={item.id}
+          title={item.title}
+          description={item.description}
+          thumbnail={item.thumbnail}
+        />
+      );
+    });
 
     return (
-      <ul>
-        {cards.map((item) => {
-          return (
-            <Card
-              key={item.id}
-              title={item.title}
-              description={item.description}
-              thumbnail={item.thumbnail}
-            />
-          );
-        })}
+      <ul className="cardlist">
+        {content.length ? (
+          content
+        ) : (
+          <li className="cardlist__empty">
+            No products found, try something else ;-)
+          </li>
+        )}
       </ul>
     );
   }
