@@ -2,6 +2,7 @@
 import { Component } from 'react';
 import Searchbar from '../searchbar/Searchbar';
 import CardList from '../cardlist/CardList';
+import BreakUiButton from '../breakUiButton/BreakUiButton';
 
 export default class App extends Component {
   state = {
@@ -18,6 +19,7 @@ export default class App extends Component {
       <div className="app">
         <Searchbar onType={this.onType} />
         <CardList onSearch={text} />
+        <BreakUiButton />
       </div>
     );
   }
