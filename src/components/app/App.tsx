@@ -1,11 +1,11 @@
 import Searchbar from '../searchbar/Searchbar';
-import Card from '../card/Card';
+import CardList from '../cardlist/CardList';
 
 export default function App() {
   return (
     <div className="app">
       <Searchbar />
-      <Card />
+      <CardList />
     </div>
   );
 }
