@@ -10,7 +10,8 @@
     "test": "vitest",
     "lint": "eslint --ext .js,.cjs,.ts,.tsx .",
     "lint:fix": "eslint --ext .js,.cjs,.ts,.tsx . --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format:fix": "prettier --write *.{js,css,ts,tsx,jsx}"
   },
   "dependencies": {
     "react": "^18.2.0",

@@ -1,13 +1,19 @@
-/* eslint-disable react/state-in-constructor */
 import { Component } from 'react';
 import Searchbar from '../searchbar/Searchbar';
 import CardList from '../cardlist/CardList';
 import BreakUiButton from '../breakUiButton/BreakUiButton';
 
-export default class App extends Component {
-  state = {
-    text: '',
-  };
+interface IState {
+  text: string;
+}
+
+export default class App extends Component<object, IState> {
+  constructor(props: object) {
+    super(props);
+    this.state = {
+      text: '',
+    };
+  }
 
   onType = (query: string) => {
     this.setState({ text: query });

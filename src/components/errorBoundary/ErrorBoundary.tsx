@@ -9,20 +9,22 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  // eslint-disable-next-line react/state-in-constructor
-  public state: State = {
-    hasError: false,
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false,
+    };
+  }
 
-  public static getDerivedStateFromError(_: Error): State {
+  static getDerivedStateFromError(): State {
     return { hasError: true };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('error:', error, errorInfo);
   }
 
-  public render() {
+  render() {
     const { children } = this.props;
     const { hasError } = this.state;
     if (hasError) {

@@ -25,13 +25,15 @@ interface IProps {
   onSearch: string;
 }
 
-class CardList extends Component<IProps> {
+class CardList extends Component<IProps, IState> {
   service = new Service();
 
-  // eslint-disable-next-line react/state-in-constructor
-  state: IState = {
-    cards: [],
-  };
+  constructor(props: IProps) {
+    super(props);
+    this.state = {
+      cards: [],
+    };
+  }
 
   componentDidMount() {
     this.onRequest();
@@ -67,17 +69,7 @@ class CardList extends Component<IProps> {
       );
     });
 
-    return (
-      <ul className="cardlist">
-        {content.length ? (
-          content
-        ) : (
-          <li className="cardlist__empty">
-            No products found, try something else ;-)
-          </li>
-        )}
-      </ul>
-    );
+    return <ul className="cardlist">{content} </ul>;
   }
 }
 

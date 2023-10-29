@@ -14,7 +14,6 @@ class BreakUiButton extends Component<object, State> {
 
   handleClick() {
     try {
-      // fetch('foo-endpoint').then((data) => data.json());
       throw new Error('error');
     } catch (error) {
       this.setState({ error: true });
