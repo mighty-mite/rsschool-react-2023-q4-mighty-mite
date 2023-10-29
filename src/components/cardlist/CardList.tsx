@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import Service from '../../service/Service';
 import Card from '../card/Card';
+import Spinner from '../spinner/Spinner';
 import './cardlist.scss';
 
 interface ICard {
@@ -19,6 +20,8 @@ interface ICard {
 
 interface IState {
   cards: ICard[];
+  loading: boolean;
+  text: string;
 }
 
 interface IProps {
@@ -32,6 +35,8 @@ class CardList extends Component<IProps, IState> {
     super(props);
     this.state = {
       cards: [],
+      loading: true,
+      text: localStorage.getItem('search') || '',
     };
   }
 
@@ -42,22 +47,25 @@ class CardList extends Component<IProps, IState> {
   componentDidUpdate(prevProps: { onSearch: string }) {
     const { onSearch } = this.props;
     if (onSearch !== prevProps.onSearch) {
+      this.setState(() => ({ loading: true }));
       this.service
         .searchProducts(onSearch)
-        .then((data) => this.setState({ cards: data }));
+        .then((data) => this.setState(() => ({ cards: data, loading: false })));
     }
   }
 
   onRequest() {
-    this.service.getAllProducts().then(this.onCardsLoaded);
+    const { text } = this.state;
+    this.service.searchProducts(text).then(this.onCardsLoaded);
   }
 
   onCardsLoaded = (cards: ICard[]) => {
     this.setState({ cards });
+    this.setState({ loading: false });
   };
 
   render() {
-    const { cards } = this.state;
+    const { cards, loading } = this.state;
     const content = cards.map((item) => {
       return (
         <Card
@@ -69,7 +77,14 @@ class CardList extends Component<IProps, IState> {
       );
     });
 
-    return <ul className="cardlist">{content} </ul>;
+    const spinner = loading ? <Spinner /> : null;
+
+    return (
+      <ul className="cardlist">
+        {content}
+        {spinner}
+      </ul>
+    );
   }
 }
 
