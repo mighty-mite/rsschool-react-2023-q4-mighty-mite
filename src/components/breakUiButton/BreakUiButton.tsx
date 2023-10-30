@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 import { Component } from 'react';
 import './breakUiButton.scss';
 
@@ -12,6 +13,11 @@ class BreakUiButton extends Component<object, State> {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  componentDidUpdate(prevProps: object, prevState: State): void {
+    const { error } = this.state;
+    if (error !== prevState.error) throw new Error('hey');
+  }
+
   handleClick() {
     try {
       throw new Error('error');
@@ -22,14 +28,6 @@ class BreakUiButton extends Component<object, State> {
   }
 
   render() {
-    const { error } = this.state;
-    if (error) {
-      return (
-        <button type="button" className="break error">
-          Error!
-        </button>
-      );
-    }
     return (
       <button className="break" type="button" onClick={this.handleClick}>
         Break it
