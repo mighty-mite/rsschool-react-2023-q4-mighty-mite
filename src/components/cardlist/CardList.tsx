@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import Service from '../../service/Service';
 import Card from '../card/Card';
 import Spinner from '../spinner/Spinner';
@@ -18,74 +18,56 @@ interface ICard {
   title: string;
 }
 
-interface IState {
-  cards: ICard[];
-  loading: boolean;
-  text: string;
-}
-
 interface IProps {
   onSearch: string;
 }
 
-class CardList extends Component<IProps, IState> {
-  service = new Service();
+function CardList(props: IProps) {
+  const { onSearch } = props;
+  const service = new Service();
 
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      cards: [],
-      loading: true,
-      text: localStorage.getItem('search') || '',
-    };
-  }
+  const [cards, setCards] = useState<ICard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [text] = useState(localStorage.getItem('search') || '');
 
-  componentDidMount() {
-    this.onRequest();
-  }
-
-  componentDidUpdate(prevProps: { onSearch: string }) {
-    const { onSearch } = this.props;
-    if (onSearch !== prevProps.onSearch) {
-      this.setState(() => ({ loading: true }));
-      this.service
-        .searchProducts(onSearch)
-        .then((data) => this.setState(() => ({ cards: data, loading: false })));
-    }
-  }
-
-  onRequest() {
-    const { text } = this.state;
-    this.service.searchProducts(text).then(this.onCardsLoaded);
-  }
-
-  onCardsLoaded = (cards: ICard[]) => {
-    this.setState({ cards });
-    this.setState({ loading: false });
+  const onRequest = () => {
+    service.searchProducts(text).then((data) => {
+      setCards(data);
+      setLoading(false);
+    });
   };
 
-  render() {
-    const { cards, loading } = this.state;
-    const content = cards.map((item) => {
-      return (
-        <Card
-          key={item.id}
-          title={item.title}
-          description={item.description}
-          thumbnail={item.thumbnail}
-        />
-      );
+  useEffect(() => {
+    onRequest();
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    service.searchProducts(onSearch).then((data) => {
+      setCards(data);
+      setLoading(false);
     });
+  }, [onSearch]);
 
-    const spinner = loading ? <Spinner /> : null;
-
+  const content = cards.map((item) => {
     return (
-      <ul className="cardlist">
-        {content}
-        {spinner}
-      </ul>
+      <Card
+        key={item.id}
+        title={item.title}
+        description={item.description}
+        thumbnail={item.thumbnail}
+      />
     );
-  }
+  });
+
+  const spinner = loading ? <Spinner /> : null;
+
+  return (
+    <ul className="cardlist">
+      {content}
+      {spinner}
+    </ul>
+  );
 }
 
 export default CardList;

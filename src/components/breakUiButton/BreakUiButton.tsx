@@ -1,39 +1,45 @@
-/* eslint-disable react/no-unused-state */
-import { Component } from 'react';
+import { useState, useEffect, useReducer } from 'react';
 import './breakUiButton.scss';
 
-interface State {
-  error: boolean;
-}
+// interface State {
+//   error: boolean;
+// }
 
-class BreakUiButton extends Component<object, State> {
-  constructor(props: object) {
-    super(props);
-    this.state = { error: false };
-    this.handleClick = this.handleClick.bind(this);
-  }
+function BreakUiButton() {
+  // constructor(props: object) {
+  //   super(props);
+  //   this.state = { error: false };
+  //   this.handleClick = this.handleClick.bind(this);
+  // }
 
-  componentDidUpdate(prevProps: object, prevState: State): void {
-    const { error } = this.state;
-    if (error !== prevState.error) throw new Error('hey');
-  }
+  const [error, setError] = useState(false);
 
-  handleClick() {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+  // componentDidUpdate(prevProps: object, prevState: State): void {
+  //   const { error } = this.state;
+  //   if (error !== prevState.error) throw new Error('hey');
+  // }
+
+  // useEffect(() => {
+  //   throw new Error('useEffect error');
+  // }, []);
+
+  const handleClick = () => {
     try {
-      throw new Error('error');
-    } catch (error) {
-      this.setState({ error: true });
-      console.error(error);
+      setError(true);
+      throw new Error('handle error');
+    } catch (e) {
+      console.error(e);
+      forceUpdate();
     }
-  }
+  };
 
-  render() {
-    return (
-      <button className="break" type="button" onClick={this.handleClick}>
-        Break it
-      </button>
-    );
-  }
+  return (
+    <button className="break" type="button" onClick={handleClick}>
+      Break it
+    </button>
+  );
 }
 
 export default BreakUiButton;
