@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Searchbar from '../searchbar/Searchbar';
 import CardList from '../cardlist/CardList';
 
 function App() {
   const [text, setText] = useState('');
+
+  useEffect(() => {
+    setText(localStorage.getItem('search') || '');
+  }, []);
 
   const onType = (query: string) => {
     setText(query);

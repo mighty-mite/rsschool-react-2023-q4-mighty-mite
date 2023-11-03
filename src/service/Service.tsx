@@ -1,11 +1,13 @@
 class Service {
   apiBase = 'https://dummyjson.com/products';
 
-  searchProducts = async (query: string) => {
+  searchProducts = async (query: string, offset = 0) => {
     try {
-      const res = await fetch(`${this.apiBase}/search?q=${query}`);
+      const res = await fetch(
+        `${this.apiBase}/search?q=${query}&limit=10&skip=${offset}`
+      );
       const json = await res.json();
-      return json.products;
+      return json;
     } catch (e) {
       throw new Error('not workin');
     }
