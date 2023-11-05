@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Service from '../../service/Service';
 import Card from '../card/Card';
 import Spinner from '../spinner/Spinner';
-import './cardlist.scss';
 import Pagination from '../pagination/Pagination';
+import './cardlist.scss';
 
 interface ICard {
   brand: string;
@@ -32,13 +33,15 @@ function CardList(props: IProps) {
   const [text] = useState(localStorage.getItem('search') || '');
   const [offset, setOffset] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(0);
-  // const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const onRequest = () => {
     service.searchProducts(text).then((data) => {
       setCards(data.products);
       setNumberOfPages(Math.ceil(data.total / 10));
       setLoading(false);
+      setSearchParams({ page: String(currentPage) });
     });
   };
 
@@ -53,6 +56,7 @@ function CardList(props: IProps) {
       setLoading(false);
       setNumberOfPages(Math.ceil(data.total / 10));
       setOffset(0);
+      setSearchParams({ page: String(currentPage) });
     });
   }, [onSearch]);
 
@@ -62,12 +66,16 @@ function CardList(props: IProps) {
       setCards(data.products);
       setLoading(false);
       setNumberOfPages(Math.ceil(data.total / 10));
+      setSearchParams({ page: String(currentPage) });
     });
   }, [offset]);
 
   const handlePageNums = (pageNumber: number) => {
     setOffset(pageNumber * 10 - 10);
+    setCurrentPage(pageNumber);
   };
+
+  const query = searchParams.get('page') || '';
 
   const content = cards.map((item) => {
     return (
@@ -92,6 +100,7 @@ function CardList(props: IProps) {
       <Pagination
         numberOfPages={numberOfPages}
         handlePageNums={handlePageNums}
+        currentPage={currentPage}
       />
     </>
   );
