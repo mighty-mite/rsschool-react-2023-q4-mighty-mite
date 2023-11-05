@@ -56,6 +56,7 @@ function CardList(props: IProps) {
       setLoading(false);
       setNumberOfPages(Math.ceil(data.total / 10));
       setOffset(0);
+      setCurrentPage(1);
       setSearchParams({ page: String(currentPage) });
     });
   }, [onSearch]);

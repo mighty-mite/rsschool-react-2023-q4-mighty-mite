@@ -1,7 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Searchbar from '../searchbar/Searchbar';
-import CardList from '../cardlist/CardList';
 import Layout from '../layout/Layout';
 import Details from '../details/Details';
 
