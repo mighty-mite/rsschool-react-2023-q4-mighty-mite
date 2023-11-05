@@ -10,7 +10,7 @@ interface ICard {
   category: string;
   description: string;
   discountPercentage: number;
-  id: number;
+  id: string;
   images: string[];
   price: number;
   rating: number;
@@ -72,6 +72,7 @@ function CardList(props: IProps) {
   const content = cards.map((item) => {
     return (
       <Card
+        id={item.id}
         key={item.id}
         title={item.title}
         description={item.description}

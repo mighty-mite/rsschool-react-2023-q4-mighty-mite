@@ -1,6 +1,9 @@
+import { Routes, Route } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Searchbar from '../searchbar/Searchbar';
 import CardList from '../cardlist/CardList';
+import Layout from '../layout/Layout';
+import Details from '../details/Details';
 
 function App() {
   const [text, setText] = useState('');
@@ -15,8 +18,11 @@ function App() {
 
   return (
     <div className="app">
-      <Searchbar onType={onType} />
-      <CardList onSearch={text} />
+      <Routes>
+        <Route path="/" element={<Layout onType={onType} onSearch={text} />}>
+          <Route path="details/:id" element={<Details />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

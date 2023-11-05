@@ -21,17 +21,7 @@ function Pagination(props: IProps) {
       </button>
     ));
 
-  return (
-    <div className="pagination">
-      <button className="pagination__prev pagination__button" type="button">
-        &laquo;
-      </button>
-      {btns}
-      <button className="pagination__next pagination__button" type="button">
-        &raquo;
-      </button>
-    </div>
-  );
+  return <div className="pagination">{btns}</div>;
 }
 
 export default Pagination;
