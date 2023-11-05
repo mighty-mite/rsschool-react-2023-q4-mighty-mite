@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #f9f9f9;
+  font-family: 'Montserrat', sans-serif;
+  font-family: 'Prompt', sans-serif;
+  font-family: 'Roboto', sans-serif;
+}
+
+.app {
+  display: flex;
+}
+
+.right {
+  overflow: hidden;
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+.details {
+  width: 40%;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #0000007f;
+  transform: translate(-100%);
+}
